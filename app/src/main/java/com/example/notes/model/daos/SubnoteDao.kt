@@ -15,7 +15,7 @@ interface SubnoteDao
     fun getAllSubnotes(): LiveData<List<Subnote>>
 
     @Query("select * from subnote where note_id = (:nId)")
-    fun getNoteSubnotes(nId: Int)
+    fun getNoteSubnotes(nId: Int): LiveData<List<Subnote>>
 
     @Update
     suspend fun updateSubnote(subnote: Subnote)
