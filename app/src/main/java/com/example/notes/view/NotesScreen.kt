@@ -31,7 +31,7 @@ val notes = listOf(
         date = Date(123),
         type = Type.work,
         priority = Priority.low,
-        hasSubnotes = null,
+        hasSubnotes = false,
         description = "note content"
     )
 )

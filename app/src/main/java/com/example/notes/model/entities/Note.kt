@@ -52,6 +52,6 @@ data class Note(
     @ColumnInfo(name = "add_date") val date: Date,
     @ColumnInfo(name = "type") val type:Type,
     @ColumnInfo(name = "priority") val priority: Priority,
-    @ColumnInfo(name="has_subnotes")  var hasSubnotes: Boolean?,
-    @ColumnInfo(name = "description") val description: String
+    @ColumnInfo(name="has_subnotes")  var hasSubnotes: Boolean,
+    @ColumnInfo(name = "description") val description: String?
 )
