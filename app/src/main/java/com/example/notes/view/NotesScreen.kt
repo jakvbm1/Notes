@@ -28,7 +28,7 @@ val notes = listOf(
     Note(
         id = 0,
         name = "title",
-        date = Date(123),
+        date = 999999999999999,
         type = Type.work,
         priority = Priority.low,
         hasSubnotes = false,

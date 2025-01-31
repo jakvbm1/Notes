@@ -1,5 +1,6 @@
 package com.example.notes.view
 
+import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -61,7 +62,7 @@ fun NoteItem(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = note.description,
+                text = note.description ?: " ",
                 style = MaterialTheme.typography.bodyMedium,
                 fontSize = 12.sp,
                 color = Color.Gray,
@@ -87,7 +88,7 @@ fun NoteItem(
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = note.date.toString(),
+                        text = formatter.format(note.date),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.secondary,
                     )
@@ -109,12 +110,14 @@ fun NoteItem(
 val note = Note(
     id = 0,
     name = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    date = Date(123),
+    date = 7000000009090,
     type = Type.work,
     priority = Priority.low,
-    hasSubnotes = null,
+    hasSubnotes = false,
     description = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
 )
+
+val formatter = SimpleDateFormat("yyyy-MM-dd") //for making long into a date
 
 @Preview
 @Composable

@@ -42,6 +42,15 @@ class Converters
     {
         return Priority.valueOf(value)
     }
+    @TypeConverter
+    fun fromDate(value: Date): Long {
+        return value.time
+    }
+
+    @TypeConverter
+    fun toDate(value: Long): Date {
+        return Date(value)
+    }
 }
 
 
@@ -49,7 +58,7 @@ class Converters
 data class Note(
 @PrimaryKey(autoGenerate = true) var id: Int = 0,
     @ColumnInfo(name = "name") var name: String,
-    @ColumnInfo(name = "add_date") val date: Date,
+    @ColumnInfo(name = "add_date") val date: Long,
     @ColumnInfo(name = "type") val type:Type,
     @ColumnInfo(name = "priority") val priority: Priority,
     @ColumnInfo(name="has_subnotes")  var hasSubnotes: Boolean,
