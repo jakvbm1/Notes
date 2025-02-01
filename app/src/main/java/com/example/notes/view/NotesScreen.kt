@@ -18,7 +18,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.notes.AlarmScheduler
 import com.example.notes.model.entities.Note
 import com.example.notes.model.entities.Priority
 import com.example.notes.model.entities.Type
@@ -40,6 +42,9 @@ val notes = listOf(
 @Preview
 @Composable
 fun NotesScreen() {
+    val context = LocalContext.current
+    val selectedInterval = "minutes"
+    AlarmScheduler.scheduleAlarm(selectedInterval, context)
     Scaffold(
         topBar = {
             TopAppBar(
