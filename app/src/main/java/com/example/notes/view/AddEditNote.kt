@@ -21,6 +21,9 @@ import com.example.notes.model.entities.Note
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditNote(navController: NavController, noteId: Int?) {
+    val context = LocalContext.current
+    val selectedInterval = "minutes"
+    AlarmScheduler.scheduleAlarm(selectedInterval, context)
     Scaffold(
         topBar = {
             TopAppBar(

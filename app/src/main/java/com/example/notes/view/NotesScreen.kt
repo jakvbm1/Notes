@@ -51,9 +51,7 @@ val notes = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(navController: NavController) {
-    //val context = LocalContext.current
-    //val selectedInterval = "minutes"
-    //AlarmScheduler.scheduleAlarm(selectedInterval, context)
+
     Scaffold(
         topBar = {
             TopAppBar(

@@ -37,7 +37,7 @@ object AlarmScheduler {
             "Daily" -> 24 * 60 * 60 * 1000L
             "2Daily" -> 2 * 24 * 60 * 60 * 1000L
             "Weekly" -> 7 * 24 * 60 * 60 * 1000L
-            "minutes" -> 15 * 60 * 1000L
+            "minutes" -> 20 * 1000L
             else -> AlarmManager.INTERVAL_DAY
         }
 
