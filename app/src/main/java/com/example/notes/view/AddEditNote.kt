@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import com.example.notes.AlarmScheduler
+
 import com.example.notes.model.entities.Note
 
 @OptIn(ExperimentalMaterial3Api::class)

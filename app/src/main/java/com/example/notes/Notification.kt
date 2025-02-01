@@ -1,4 +1,4 @@
-package com.example.notes
+package com.example.notes.receivers
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -7,19 +7,21 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 
+
 const val notificationID = 1
 const val channelID = "channel1"
-const val titleExtra = "titleExtra"
-const val messageExtra = "messageExtra"
 
-class NotificationReceiver : BroadcastReceiver() {
+class NotificationReceiver : BroadcastReceiver() { // ✅ Renamed class
     override fun onReceive(context: Context, intent: Intent?) {
         showNotification(context, "Reminder", "This is your scheduled notification!")
+
+        // Retrieve last scheduled interval from SharedPreferences
         val sharedPref = context.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
         val interval = sharedPref.getString("interval", "Daily") ?: "Daily"
 
+        // ✅ Re-schedule the alarm
         AlarmScheduler.scheduleAlarm("minutes", context)
-}
+    }
 
     private fun showNotification(context: Context, title: String, message: String) {
         val notificationManager =
@@ -32,13 +34,12 @@ class NotificationReceiver : BroadcastReceiver() {
         }
 
         val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
-        notificationManager.notify(1, notification)
-
+        notificationManager.notify(notificationID, notification)
     }
 }
