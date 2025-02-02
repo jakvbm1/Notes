@@ -45,14 +45,9 @@ class AddEditNoteVM(application: Application, private val noteID: Int?) : Androi
         viewModelScope.launch {
             if (noteID != null) {
                 val fetchedNote = noteRepo.getNote(noteID)
-                if (fetchedNote != null) {
-                    note.value = fetchedNote
-                    if (fetchedNote.hasSubnotes) {
-                        subnotes.value = subnoteRepo.notesSubnotes(fetchedNote).value ?: emptyList()
-                    }
-                } else {
-                    println("Error: Note with ID $noteID not found.")
-                    note.value = Note(0, "", System.currentTimeMillis(), Type.work, Priority.low, false, "")
+                note.value = fetchedNote
+                if (fetchedNote.hasSubnotes) {
+                    subnotes.value = subnoteRepo.notesSubnotes(fetchedNote).value ?: emptyList()
                 }
             } else {
                 // Create a new empty note
