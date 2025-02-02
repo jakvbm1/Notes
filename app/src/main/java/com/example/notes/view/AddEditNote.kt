@@ -1,5 +1,6 @@
 package com.example.notes.view
 
+import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
 import com.example.notes.model.entities.Note
+import com.example.notes.viewmodel.AddEditNoteVM
+import com.example.notes.viewmodel.AddEditNoteVMFactory
 import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,12 +31,16 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
     val context = LocalContext.current
     val selectedInterval = "minutes"
 
+    val application = context.applicationContext as Application
+
+    val viewModel: AddEditNoteVM = viewModel(factory = AddEditNoteVMFactory(application, noteId))
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = if (noteId == null) "New Note" else "Edit Note",
+                        text = if (noteId == null) "New Note" else "edit ${viewModel.note!!.name}",
                         style = MaterialTheme.typography.headlineMedium
                     )
                 },

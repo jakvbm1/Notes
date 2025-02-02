@@ -1,5 +1,6 @@
 package com.example.notes.view
 
+import android.app.Application
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -34,6 +35,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -41,38 +43,46 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.notes.model.entities.Note
 import com.example.notes.model.entities.Priority
 import com.example.notes.model.entities.Type
+import com.example.notes.viewmodel.NotesScreenVM
+import com.example.notes.viewmodel.NotesScreenVMFactory
 
-val notes = listOf(
-    Note(
-        id = 1,
-        name = "title",
-        date = 999999999999999,
-        type = Type.work,
-        priority = Priority.low,
-        hasSubnotes = false,
-        description = "note content"
-    ),
-    Note(
-        id = 2,
-        name = "title2",
-        date = 99999,
-        type = Type.work,
-        priority = Priority.low,
-        hasSubnotes = false,
-        description = "note content2"
-    )
-)
+
+//val notes = listOf(
+ //   Note(
+ //       id = 1,
+  //      name = "title",
+ //       date = 999999999999999,
+ //       type = Type.work,
+ //       priority = Priority.low,
+ //       hasSubnotes = false,
+ //       description = "note content"
+ //   ),
+ //   Note(
+ //       id = 2,
+ //       name = "title2",
+ //       date = 99999,
+//        type = Type.work,
+ //       priority = Priority.low,
+  //      hasSubnotes = false,
+  //      description = "note content2"
+  //  )
+//)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotesScreen(navController: NavController) {
+fun NotesScreen(navController: NavController, ) {
+
+    val viewModel: NotesScreenVM = viewModel(factory = NotesScreenVMFactory(LocalContext.current.applicationContext as Application))
+    val notes by viewModel.allNotes.observeAsState(emptyList())
 
     Scaffold(
         topBar = {
@@ -107,7 +117,7 @@ fun NotesScreen(navController: NavController) {
                 NoteItem(
                     note = note,
                     onClick = { navController.navigate("add_edit_note/${note.id}") },
-                    onDeleteClick = { /* delete note */ }
+                    onDeleteClick = { viewModel.removeNote(note) }
                 )
             }
         }

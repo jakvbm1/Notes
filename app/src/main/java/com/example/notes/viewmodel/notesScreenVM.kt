@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.notes.model.AppDatabase
 import com.example.notes.model.entities.Note
@@ -11,9 +13,20 @@ import com.example.notes.model.repository.NoteRepository
 import kotlinx.coroutines.launch
 
 
+class NotesScreenVMFactory(private val application: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(NotesScreenVM::class.java)) {
+            return NotesScreenVM(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
 
 
 class NotesScreenVM(application: Application) : AndroidViewModel(application) {
+
+
+
     val allNotes: LiveData<List<Note>>
     private val _sortedNotes = MutableLiveData<List<Note>>()
     val sortedNotes: LiveData<List<Note>> get() = _sortedNotes
