@@ -1,8 +1,10 @@
 package com.example.notes.view
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -17,13 +19,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 
 import com.example.notes.model.entities.Note
+import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditNote(navController: NavController, noteId: Int?) {
     val context = LocalContext.current
     val selectedInterval = "minutes"
-    AlarmScheduler.scheduleAlarm(selectedInterval, context)
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -40,6 +43,18 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
     ) { paddingValues ->
         Column(Modifier.padding(paddingValues)) {
             Text(text = noteId?.toString() ?: "null")
+            Button(
+                onClick = {
+                    // Schedule alarm when button is clicked
+                    val randomNumber = Random.nextInt(0, 11)
+                    AlarmScheduler.scheduleAlarm(selectedInterval, context, randomNumber.toString())
+                    Toast.makeText(context, "Alarm scheduled for " + randomNumber.toString(), Toast.LENGTH_SHORT).show()
+
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Schedule Alarm")
+            }
         }
     }
 }
