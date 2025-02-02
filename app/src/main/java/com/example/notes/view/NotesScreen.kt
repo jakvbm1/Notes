@@ -55,28 +55,6 @@ import com.example.notes.model.entities.Type
 import com.example.notes.viewmodel.NotesScreenVM
 import com.example.notes.viewmodel.NotesScreenVMFactory
 
-
-//val notes = listOf(
- //   Note(
- //       id = 1,
-  //      name = "title",
- //       date = 999999999999999,
- //       type = Type.work,
- //       priority = Priority.low,
- //       hasSubnotes = false,
- //       description = "note content"
- //   ),
- //   Note(
- //       id = 2,
- //       name = "title2",
- //       date = 99999,
-//        type = Type.work,
- //       priority = Priority.low,
-  //      hasSubnotes = false,
-  //      description = "note content2"
-  //  )
-//)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(navController: NavController, ) {
@@ -98,16 +76,8 @@ fun NotesScreen(navController: NavController, ) {
                 modifier = Modifier.fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
-        }/*,
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navController.navigate("add_edit_note") },
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Note")
-            }
         }
-        */
+
     ) { paddingValues ->
         LazyColumn(
             contentPadding = paddingValues,
@@ -121,12 +91,12 @@ fun NotesScreen(navController: NavController, ) {
                 )
             }
         }
-        ExpandableButtons()
+        ExpandableButtons(navController)
     }
 }
 
 @Composable
-fun ExpandableButtons() {
+fun ExpandableButtons(navController: NavController) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
     Box(
@@ -158,7 +128,7 @@ fun ExpandableButtons() {
                     ActionButton(
                         text = "Text",
                         icon = Icons.Default.Edit,
-                        onClick = { /* navigate to AddEditNote with description*/ }
+                        onClick = { navController.navigate("add_edit_note") }
                     )
                 }
             }
