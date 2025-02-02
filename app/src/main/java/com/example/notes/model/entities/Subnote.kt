@@ -16,5 +16,5 @@ data class Subnote(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "note_id") val noteId: Int,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "is_completed") val isCompleted: Boolean
+    @ColumnInfo(name = "is_completed") var isCompleted: Boolean
 )

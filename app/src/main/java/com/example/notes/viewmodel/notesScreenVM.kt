@@ -10,6 +10,9 @@ import com.example.notes.model.entities.Note
 import com.example.notes.model.repository.NoteRepository
 import kotlinx.coroutines.launch
 
+
+
+
 class NotesScreenVM(application: Application) : AndroidViewModel(application) {
     val allNotes: LiveData<List<Note>>
     private val _sortedNotes = MutableLiveData<List<Note>>()

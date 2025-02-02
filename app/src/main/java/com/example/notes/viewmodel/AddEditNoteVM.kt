@@ -5,6 +5,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.notes.model.AppDatabase
 import com.example.notes.model.entities.Note
@@ -18,11 +20,21 @@ import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
 
-class AddEditNoteVM(application: Application, val note: Note?): AndroidViewModel(application)
+class AddEditNoteVMFactory(private val application: Application, private val noteID: Int?): ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if(modelClass.isAssignableFrom(AddEditNoteVM::class.java))
+        {
+            return AddEditNoteVM(application, noteID) as T
+        }
+        throw IllegalArgumentException("Unknowne ViewModel class")
+    }
+}
+
+class AddEditNoteVM(application: Application, val noteID: Int?): AndroidViewModel(application)
 {
     val noteRepo: NoteRepository
     val subnoteRepo: SubnoteRepository
-
+    val note: Note?
     val subnotes: LiveData<List<Subnote>>?
 
     init
@@ -32,6 +44,12 @@ class AddEditNoteVM(application: Application, val note: Note?): AndroidViewModel
 
         noteRepo = NoteRepository(noteDao)
         subnoteRepo = SubnoteRepository(subnoteDao)
+
+        note = if(noteID != null) {
+            noteRepo.getNote(noteID)
+        } else {
+            null
+        }
 
         subnotes = if(note != null) {
             subnoteRepo.notesSubnotes(note)
@@ -80,6 +98,8 @@ class AddEditNoteVM(application: Application, val note: Note?): AndroidViewModel
 
     }
 
+    //funkcje ponizej dzialaja tylko w wypadku jezeli note nie jest nullem - tzn jesli jest odpalona edycja
+
     fun deleteNote(subnote: Subnote)
     {
         if(note != null)
@@ -102,6 +122,28 @@ class AddEditNoteVM(application: Application, val note: Note?): AndroidViewModel
                     }
                 }
             }
+        }
+    }
+
+    fun modifyNote(name: String, description: String, type:String, priority: String)
+    {
+        if(note != null)
+        {
+            note.name = name
+            note.description = description
+            note.type = Type.valueOf(type)
+            note.priority = Priority.valueOf(priority)
+
+            viewModelScope.launch { noteRepo.update(note) }
+        }
+    }
+
+    fun completeSubnote(subnote: Subnote)
+    {
+        if(note != null && note.hasSubnotes)
+        {
+            subnote.isCompleted = true
+            viewModelScope.launch { subnoteRepo.update(subnote) }
         }
     }
 }
