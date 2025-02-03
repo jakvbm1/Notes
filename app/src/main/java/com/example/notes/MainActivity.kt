@@ -21,6 +21,7 @@ import com.example.notes.ui.theme.NotesTheme
 import com.example.notes.view.AddEditList
 import com.example.notes.view.AddEditNote
 import com.example.notes.view.NotesScreen
+import com.example.notes.view.Settings
 import java.util.Date
 
 class MainActivity : ComponentActivity() {
@@ -50,6 +51,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("add_edit_list") {
                         AddEditList(navController, null)
+                    }
+                    composable("settings_route") {
+                        Settings(navController)
                     }
                 }
             )

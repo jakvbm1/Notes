@@ -94,6 +94,14 @@ fun AddEditList(navController: NavController, noteId: Int?) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                //ExpandableList() for priority
+
+                //Spacer(modifier = Modifier.height(16.dp))
+
+                //ExpandableList() for type
+
+                //Spacer(modifier = Modifier.height(16.dp))
+
                 // Subnotes List
                 LazyColumn {
                     itemsIndexed(viewModel.subnotes.value) { index, subnote ->

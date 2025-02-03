@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ExpandableList() {
+fun ExpandableList(stringItems: List<String> /*, some_function from viewmodel?? */ ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     var selectedItem by rememberSaveable { mutableStateOf("Select an item") }
 
@@ -28,13 +28,12 @@ fun ExpandableList() {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Dropdown Box (Replaces Button)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))  // Rounded corners
-                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp)) // Border for dropdown
-                .background(Color.White) // Background color
+                .clip(RoundedCornerShape(8.dp))
+                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                .background(Color.White)
                 .clickable { expanded = !expanded }
                 .padding(12.dp),
         ) {
@@ -47,24 +46,22 @@ fun ExpandableList() {
             }
         }
 
-        // Expandable List with consistent design
         AnimatedVisibility(visible = expanded) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp)) // Consistent rounding
-                    .border(1.dp, Color.Gray, RoundedCornerShape(8.dp)) // Border
-                    .background(Color.White) // Background
+                    .clip(RoundedCornerShape(8.dp))
+                    .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                    .background(Color.White)
                     .padding(8.dp)
             ) {
-                val items = listOf("Item 1", "Item 2", "Item 3", "Item 4")
-
-                items.forEach { item ->
+                stringItems.forEach { item ->
                     Text(
                         text = item,
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
+                                // and add this function I guess here
                                 selectedItem = item
                                 expanded = false
                             }

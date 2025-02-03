@@ -82,6 +82,14 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                //ExpandableList() for priority
+
+                //Spacer(modifier = Modifier.height(16.dp))
+
+                //ExpandableList() for type
+
+                //Spacer(modifier = Modifier.height(16.dp))
+
                 // Single Note Content
                 OutlinedTextField(
                     value = viewModel.note.value!!.description ?: "",

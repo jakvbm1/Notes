@@ -67,7 +67,7 @@ fun NotesScreen(navController: NavController, ) {
                     Text(text = "Notes", style = MaterialTheme.typography.headlineMedium)
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* navigate to settings */ }) {
+                    IconButton(onClick = { navController.navigate("settings_route") }) {
                         Icon(Icons.Filled.Settings, contentDescription = "Settings")
                     }
                 },
@@ -167,12 +167,4 @@ fun ActionButton(text: String, icon: ImageVector, onClick: () -> Unit) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(text, color = MaterialTheme.colorScheme.onPrimary)
     }
-}
-
-// for testing
-
-@Preview
-@Composable
-fun MainScreenPreview() {
-    NotesScreen(navController = rememberNavController())
 }
