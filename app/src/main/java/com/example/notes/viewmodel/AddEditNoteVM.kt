@@ -32,9 +32,6 @@ class AddEditNoteVM(application: Application, private val noteID: Int?) : Androi
     var note = mutableStateOf<Note?>(null)
         private set
 
-    var subnotes = mutableStateOf<List<Subnote>>(emptyList())
-        private set
-
     init {
         val noteDao = AppDatabase.getDatabase(application).noteDao()
         val subnoteDao = AppDatabase.getDatabase(application).subnoteDao()
@@ -46,9 +43,6 @@ class AddEditNoteVM(application: Application, private val noteID: Int?) : Androi
             if (noteID != null) {
                 val fetchedNote = noteRepo.getNote(noteID)
                 note.value = fetchedNote
-                if (fetchedNote.hasSubnotes) {
-                    subnotes.value = subnoteRepo.notesSubnotes(fetchedNote).value ?: emptyList()
-                }
             } else {
                 // Create a new empty note
                 note.value = Note(0, "", System.currentTimeMillis(), Type.work, Priority.low, false, "")
@@ -66,12 +60,6 @@ class AddEditNoteVM(application: Application, private val noteID: Int?) : Androi
         note.value?.let {
             note.value = it.copy(description = newDescription)
         }
-    }
-
-    fun updateSubnote(index: Int, newValue: String) {
-        val updatedList = subnotes.value.toMutableList()
-        updatedList[index] = updatedList[index].copy(name = newValue)
-        subnotes.value = updatedList
     }
 
     fun saveNote() {

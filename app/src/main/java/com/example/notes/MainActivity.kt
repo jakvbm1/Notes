@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.notes.ui.theme.NotesTheme
+import com.example.notes.view.AddEditList
 import com.example.notes.view.AddEditNote
 import com.example.notes.view.NotesScreen
 import java.util.Date
@@ -42,6 +43,13 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("add_edit_note") {
                         AddEditNote(navController, null)
+                    }
+                    composable("add_edit_list/{noteId}") {
+                        val noteId = it.arguments?.getString("noteId")?.toIntOrNull()
+                        AddEditList(navController, noteId)
+                    }
+                    composable("add_edit_list") {
+                        AddEditList(navController, null)
                     }
                 }
             )

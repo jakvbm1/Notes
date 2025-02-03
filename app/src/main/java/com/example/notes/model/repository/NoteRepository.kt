@@ -32,4 +32,10 @@ class NoteRepository(private val noteDao: NoteDao) {
             noteDao.updateNote(note)
         }
     }
+
+    suspend fun getMaxNoteId(): Int {
+        return withContext(Dispatchers.IO) {
+            noteDao.getMaxId() ?: 0
+        }
+    }
 }

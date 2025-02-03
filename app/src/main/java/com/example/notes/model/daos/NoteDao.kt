@@ -26,4 +26,6 @@ interface NoteDao
     @Delete
     suspend fun deleteNote(note: Note)
 
+    @Query("SELECT MAX(id) FROM Note")
+    suspend fun getMaxId(): Int?
 }

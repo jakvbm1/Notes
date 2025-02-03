@@ -46,12 +46,13 @@ class AddEditListVM(application: Application, private val noteID: Int?) : Androi
             if (noteID != null) {
                 val fetchedNote = noteRepo.getNote(noteID)
                 note.value = fetchedNote
-                if (fetchedNote.hasSubnotes) {
-                    subnotes.value = subnoteRepo.notesSubnotes(fetchedNote).value ?: emptyList()
+
+                subnoteRepo.notesSubnotes(fetchedNote).observeForever { fetchedSubnotes ->
+                    subnotes.value = fetchedSubnotes ?: emptyList()
                 }
             } else {
-                // Create a new empty note
                 note.value = Note(0, "", System.currentTimeMillis(), Type.work, Priority.low, true, "")
+                subnotes.value = listOf(Subnote(0, 0, "", false))
             }
         }
     }
@@ -62,41 +63,40 @@ class AddEditListVM(application: Application, private val noteID: Int?) : Androi
         }
     }
 
-    fun updateNoteDescription(newDescription: String) {
-        note.value?.let {
-            note.value = it.copy(description = newDescription)
-        }
-    }
-
     fun updateSubnote(index: Int, newValue: String) {
         val updatedList = subnotes.value.toMutableList()
         updatedList[index] = updatedList[index].copy(name = newValue)
         subnotes.value = updatedList
     }
 
-    fun toggleCompletion(index: Int)
-    {
+    fun toggleCompletion(index: Int) {
         val updatedList = subnotes.value.toMutableList()
         val temp = updatedList[index].isCompleted
         updatedList[index] = updatedList[index].copy(isCompleted = !temp)
         subnotes.value = updatedList
     }
 
-    fun saveNote(subnoteNames: List<String>) {
+    fun addNewSubnote() {
+        val newElement = listOf(Subnote(0, 0, "", false))
+        subnotes.value += newElement
+    }
+
+    fun saveNote() {
         viewModelScope.launch {
             note.value?.let {
                 if (noteID == null) {
                     noteRepo.insert(it)
-                    for(sub in subnoteNames)
-                    {
-                        val subnote = Subnote(
-                            noteId = note.value!!.id,
-                            name = sub,
-                            isCompleted = false
-                        )
-                        subnoteRepo.add(subnote)
+                    val noteId = noteRepo.getMaxNoteId()
+
+                    // Create a new list with updated noteId for each subnote
+                    subnotes.value = subnotes.value.map { subnote ->
+                        subnote.copy(noteId = noteId)  // Create a new Subnote instance with updated noteId
                     }
 
+                    // Insert updated subnotes into the database
+                    for (subnote in subnotes.value) {
+                        subnoteRepo.add(subnote)
+                    }
 
                 } else {
                     noteRepo.update(it)

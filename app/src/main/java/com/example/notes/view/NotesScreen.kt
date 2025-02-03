@@ -86,7 +86,8 @@ fun NotesScreen(navController: NavController, ) {
             items(notes) { note ->
                 NoteItem(
                     note = note,
-                    onClick = { navController.navigate("add_edit_note/${note.id}") },
+                    onClick = { if (note.hasSubnotes) { navController.navigate("add_edit_list/${note.id}") }
+                        else { navController.navigate("add_edit_note/${note.id}") } },
                     onDeleteClick = { viewModel.removeNote(note) }
                 )
             }
@@ -123,12 +124,18 @@ fun ExpandableButtons(navController: NavController) {
                     ActionButton(
                         text = "List",
                         icon = Icons.Default.CheckCircle,
-                        onClick = { /* navigate to AddEditNote without description */ }
+                        onClick = {
+                            isExpanded = false
+                            navController.navigate("add_edit_list")
+                        }
                     )
                     ActionButton(
                         text = "Text",
                         icon = Icons.Default.Edit,
-                        onClick = { navController.navigate("add_edit_note") }
+                        onClick = {
+                            isExpanded = false
+                            navController.navigate("add_edit_note")
+                        }
                     )
                 }
             }
