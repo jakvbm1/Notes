@@ -49,9 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.notes.model.entities.Note
-import com.example.notes.model.entities.Priority
-import com.example.notes.model.entities.Type
+import com.example.notes.view.components.NoteItem
 import com.example.notes.viewmodel.NotesScreenVM
 import com.example.notes.viewmodel.NotesScreenVMFactory
 
@@ -117,7 +115,7 @@ fun ExpandableButtons(navController: NavController) {
         Column(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(bottom = 16.dp, end = 16.dp)
+            modifier = Modifier.padding(bottom = 40.dp, end = 16.dp)
         ) {
             AnimatedVisibility(visible = isExpanded) {
                 Column(horizontalAlignment = Alignment.End) {

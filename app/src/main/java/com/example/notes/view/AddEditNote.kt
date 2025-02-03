@@ -2,15 +2,20 @@ package com.example.notes.view
 
 import android.app.Application
 import android.widget.Toast
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -23,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.notes.view.components.ExpandableList
 import com.example.notes.viewmodel.AddEditNoteVM
 import com.example.notes.viewmodel.AddEditNoteVMFactory
 
@@ -45,6 +51,20 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
                 modifier = Modifier.fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
+        },
+        // Note save button
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.saveNote()
+                    Toast.makeText(context, "Note Saved", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
+                },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            ) {
+                Icon(imageVector = Icons.Default.Check, contentDescription = "Save Note")
+            }
         }
     ) { paddingValues ->
 
@@ -70,20 +90,6 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
                     modifier = Modifier.fillMaxWidth(),
                     maxLines = 5
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Save Button
-                Button(
-                    onClick = {
-                        viewModel.saveNote()
-                        Toast.makeText(context, "Note Saved", Toast.LENGTH_SHORT).show()
-                        navController.popBackStack()
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Save Note")
-                }
             }
         }
     }

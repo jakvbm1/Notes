@@ -1,4 +1,4 @@
-package com.example.notes.view
+package com.example.notes.view.components
 
 import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.background
@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import com.example.notes.model.entities.Note
 import com.example.notes.model.entities.Priority
 import com.example.notes.model.entities.Type
-import java.sql.Date
 
 @Composable
 fun NoteItem(

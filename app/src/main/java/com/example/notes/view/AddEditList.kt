@@ -14,14 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -59,6 +63,20 @@ fun AddEditList(navController: NavController, noteId: Int?) {
                 modifier = Modifier.fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
+        },
+        // Note save button
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.saveNote()
+                    Toast.makeText(context, "Note Saved", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
+                },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            ) {
+                Icon(imageVector = Icons.Default.Check, contentDescription = "Save Note")
+            }
         }
     ) { paddingValues ->
 
@@ -114,20 +132,6 @@ fun AddEditList(navController: NavController, noteId: Int?) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add subnote", tint = MaterialTheme.colorScheme.onPrimary)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Add new list element", color = MaterialTheme.colorScheme.onPrimary)
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Save Button
-                Button(
-                    onClick = {
-                        viewModel.saveNote()
-                        Toast.makeText(context, "Note Saved", Toast.LENGTH_SHORT).show()
-                        navController.popBackStack()
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Save Note")
                 }
             }
         }
