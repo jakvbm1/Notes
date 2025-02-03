@@ -30,4 +30,9 @@ class SubnoteRepository(private val subnoteDao: SubnoteDao) {
             subnoteDao.addSubnote(subnote)
         }
     }
+
+    suspend fun getNotesSubnotesDirect(note: Note): List<Subnote> {
+        return subnoteDao.getNoteSubnotesDirect(note.id)
+    }
+
 }

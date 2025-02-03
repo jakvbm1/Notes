@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.notes.model.AppDatabase
 import com.example.notes.model.entities.Note
+import com.example.notes.model.entities.Subnote
 import com.example.notes.model.repository.NoteRepository
+import com.example.notes.model.repository.SubnoteRepository
 import kotlinx.coroutines.launch
 
 
@@ -32,10 +34,14 @@ class NotesScreenVM(application: Application) : AndroidViewModel(application) {
     val sortedNotes: LiveData<List<Note>> get() = _sortedNotes
 
     private val repository: NoteRepository
+    private val subRepository: SubnoteRepository
 
     init {
         val dao = AppDatabase.getDatabase(application).noteDao()
         repository = NoteRepository(dao)
+
+        val subDao = AppDatabase.getDatabase(application).subnoteDao()
+        subRepository = SubnoteRepository(subDao)
 
         allNotes = repository.allNotes
         _sortedNotes.value = allNotes.value // Default to unsorted list
@@ -65,9 +71,31 @@ class NotesScreenVM(application: Application) : AndroidViewModel(application) {
 
     fun removeNote(note: Note)
     {
-        viewModelScope.launch()
-        {
-            repository.delete(note)
+
+            if(note.hasSubnotes)
+            {
+
+
+                viewModelScope.launch {val subnotes = subRepository.getNotesSubnotesDirect(note)
+                if (subnotes.isNotEmpty())
+                {
+                    for(sub in subnotes)
+                    {
+                        subRepository.delete(sub)
+                    }
+
+                    repository.delete(note)
+                }
+                }
+            }
+            else
+            {
+                viewModelScope.launch { repository.delete(note) }
+
+            }
+
+
+
         }
     }
-}
+

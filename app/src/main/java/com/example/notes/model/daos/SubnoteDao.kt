@@ -26,4 +26,8 @@ interface SubnoteDao
     @Delete
     fun deleteSubnote(subnote: Subnote)
 
+    @Query("SELECT * FROM subnote WHERE note_id = (:nId)")
+    suspend fun getNoteSubnotesDirect(nId: Int): List<Subnote> // Change return type to List<Subnote>
+
+
 }
