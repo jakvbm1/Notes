@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ExpandableList(stringItems: List<String> /*, some_function from viewmodel?? */ ) {
+fun ExpandableList(stringItems: List<String>, onClick: (input: String) -> Unit) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     var selectedItem by rememberSaveable { mutableStateOf("Select an item") }
 
@@ -64,6 +63,7 @@ fun ExpandableList(stringItems: List<String> /*, some_function from viewmodel?? 
                                 // and add this function I guess here
                                 selectedItem = item
                                 expanded = false
+                                onClick(item)
                             }
                             .padding(12.dp)
                     )

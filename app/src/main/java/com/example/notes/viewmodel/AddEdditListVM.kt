@@ -63,6 +63,18 @@ class AddEditListVM(application: Application, private val noteID: Int?) : Androi
         }
     }
 
+    fun updateNoteType(newType:String){
+        note.value?.let {
+            note.value = it.copy(type = Type.valueOf(newType))
+        }
+    }
+
+    fun updateNotePriority(newP:String){
+        note.value?.let {
+            note.value = it.copy(priority = Priority.valueOf(newP))
+        }
+    }
+
     fun updateSubnote(index: Int, newValue: String) {
         val updatedList = subnotes.value.toMutableList()
         updatedList[index] = updatedList[index].copy(name = newValue)

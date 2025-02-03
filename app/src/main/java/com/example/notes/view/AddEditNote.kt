@@ -28,6 +28,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.notes.model.entities.Priority
+import com.example.notes.model.entities.Type
 import com.example.notes.view.components.ExpandableList
 import com.example.notes.viewmodel.AddEditNoteVM
 import com.example.notes.viewmodel.AddEditNoteVMFactory
@@ -38,7 +40,8 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
     val context = LocalContext.current
     val application = context.applicationContext as Application
     val viewModel: AddEditNoteVM = viewModel(factory = AddEditNoteVMFactory(application, noteId))
-
+    var priorityNames = Priority.entries.map{it.name}
+    var typeNames = Type.entries.map{it.name}
     Scaffold(
         topBar = {
             TopAppBar(
@@ -82,13 +85,13 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                //ExpandableList() for priority
+                Spacer(modifier = Modifier.height(16.dp))
 
-                //Spacer(modifier = Modifier.height(16.dp))
+                ExpandableList(priorityNames, {selectedPriority -> viewModel.updateNotePriority(selectedPriority)})
 
-                //ExpandableList() for type
+                Spacer(modifier = Modifier.height(16.dp))
 
-                //Spacer(modifier = Modifier.height(16.dp))
+                ExpandableList(typeNames, {selectedName -> viewModel.updateNoteType(selectedName)})
 
                 // Single Note Content
                 OutlinedTextField(
