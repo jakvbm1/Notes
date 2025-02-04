@@ -2,11 +2,7 @@ package com.example.notes.view
 
 import AlarmScheduler.scheduleAlarm
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import android.widget.Toast
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,12 +10,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -42,7 +39,6 @@ import com.example.notes.model.entities.Type
 import com.example.notes.view.components.ExpandableList
 import com.example.notes.viewmodel.AddEditNoteVM
 import com.example.notes.viewmodel.AddEditNoteVMFactory
-import java.io.Console
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,6 +61,11 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
                         text = if (noteId == null) "New Note" else "Edit Note",
                         style = MaterialTheme.typography.headlineMedium
                     )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
