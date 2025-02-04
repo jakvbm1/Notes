@@ -14,7 +14,7 @@ object AlarmScheduler {
         val data = setOf(interval, name)
         val alarm_ids = sharedPref.all.keys
 
-            if (!alarm_ids.contains(alarmId)){
+        if (!alarm_ids.contains(alarmId)){
                 with(sharedPref.edit()) {
                     putStringSet("$alarmId", data)
                     apply()
