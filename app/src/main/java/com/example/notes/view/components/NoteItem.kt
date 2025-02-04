@@ -2,6 +2,7 @@ package com.example.notes.view.components
 
 import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,8 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -44,6 +47,7 @@ fun NoteItem(
             .fillMaxWidth()
             .padding(8.dp)
             .clickable { onClick() }
+            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
     ) {
         Column(
             modifier = Modifier
@@ -54,19 +58,36 @@ fun NoteItem(
                 text = note.name,
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = note.description ?: " ",
-                style = MaterialTheme.typography.bodyMedium,
-                fontSize = 12.sp,
-                color = Color.Gray,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
+            if (note.hasSubnotes) {
+                Row {
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = "check",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "Items list",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            } else {
+                Text(
+                    text = note.description ?: " ",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
             Spacer(modifier = Modifier.height(6.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -77,24 +98,25 @@ fun NoteItem(
                     Text(
                         text = "type: " + note.type.toString(),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Text(
                         text = "priority: " + note.priority.toString(),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
                         text = formatter.format(note.date),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 IconButton(onClick = onDeleteClick) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete Note"
+                        contentDescription = "Delete Note",
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -102,24 +124,4 @@ fun NoteItem(
     }
 }
 
-
-// for the testing
-
-val note = Note(
-    id = 0,
-    name = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    date = 7000000009090,
-    type = Type.work,
-    priority = Priority.low,
-    hasSubnotes = false,
-    description = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    notificationid = ""
-)
-
 val formatter = SimpleDateFormat("yyyy-MM-dd") //for making long into a date
-
-@Preview
-@Composable
-fun ItemPreview() {
-    NoteItem(note = note, onClick = { }, onDeleteClick = { })
-}

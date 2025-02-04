@@ -4,16 +4,9 @@ import android.app.Application
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -56,7 +49,7 @@ import com.example.notes.viewmodel.NotesScreenVMFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotesScreen(navController: NavController, ) {
+fun NotesScreen(navController: NavController) {
 
     val viewModel: NotesScreenVM = viewModel(factory = NotesScreenVMFactory(LocalContext.current.applicationContext as Application))
     val notes by viewModel.allNotes.observeAsState(emptyList())
@@ -65,12 +58,7 @@ fun NotesScreen(navController: NavController, ) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Notes", style = MaterialTheme.typography.headlineMedium)
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigate("settings_route") }) {
-                        Icon(Icons.Filled.Settings, contentDescription = "Settings")
-                    }
+                    Text(text = "Notes", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onPrimary)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
@@ -88,23 +76,18 @@ fun NotesScreen(navController: NavController, ) {
                 NoteItem(
                     note = note,
                     onClick = { if (note.hasSubnotes) { navController.navigate("add_edit_list/${note.id}") }
-                        else { navController.navigate("add_edit_note/${note.id}") } },
+                    else { navController.navigate("add_edit_note/${note.id}") } },
                     onDeleteClick = { viewModel.removeNote(note)
-                    if (note.notificationid!=null){
-
-
-                        if (note.notificationid!=null){
-
-
+                        if (note.notificationid != null) {
                             val sharedPref = context.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
                             val alarm_ids = sharedPref.all.keys
-                            if (alarm_ids.contains(note.notificationid)){
+                            if (alarm_ids.contains(note.notificationid)) {
                                 with(sharedPref.edit()) {
                                     remove(note.notificationid) // Remove the specific alarm entry
                                     apply()
-                            }}}
-                    }
-                    }
+                                }
+                            }
+                        }}
                 )
             }
         }

@@ -43,33 +43,35 @@ class MainActivity : ComponentActivity() {
         initializeApp()
 
         setContent {
-            val navController = rememberNavController()
-            NavHost(
-                navController = navController,
-                startDestination = "notes_screen",
-                builder = {
-                    composable("notes_screen") {
-                        NotesScreen(navController)
+            NotesTheme {
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = "notes_screen",
+                    builder = {
+                        composable("notes_screen") {
+                            NotesScreen(navController)
+                        }
+                        composable("add_edit_note/{noteId}") {
+                            val noteId = it.arguments?.getString("noteId")?.toIntOrNull()
+                            AddEditNote(navController, noteId)
+                        }
+                        composable("add_edit_note") {
+                            AddEditNote(navController, null)
+                        }
+                        composable("add_edit_list/{noteId}") {
+                            val noteId = it.arguments?.getString("noteId")?.toIntOrNull()
+                            AddEditList(navController, noteId)
+                        }
+                        composable("add_edit_list") {
+                            AddEditList(navController, null)
+                        }
+                        composable("settings_route") {
+                            Settings(navController)
+                        }
                     }
-                    composable("add_edit_note/{noteId}") {
-                        val noteId = it.arguments?.getString("noteId")?.toIntOrNull()
-                        AddEditNote(navController, noteId)
-                    }
-                    composable("add_edit_note") {
-                        AddEditNote(navController, null)
-                    }
-                    composable("add_edit_list/{noteId}") {
-                        val noteId = it.arguments?.getString("noteId")?.toIntOrNull()
-                        AddEditList(navController, noteId)
-                    }
-                    composable("add_edit_list") {
-                        AddEditList(navController, null)
-                    }
-                    composable("settings_route") {
-                        Settings(navController)
-                    }
-                }
-            )
+                )
+            }
         }
     }
 
