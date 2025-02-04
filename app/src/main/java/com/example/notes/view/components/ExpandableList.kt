@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ExpandableList(stringItems: List<String>, onClick: (input: String) -> Unit) {
+fun ExpandableList(title: String, stringItems: List<String>, onClick: (input: String) -> Unit) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     var selectedItem by rememberSaveable { mutableStateOf("Select an item") }
 
@@ -27,6 +27,8 @@ fun ExpandableList(stringItems: List<String>, onClick: (input: String) -> Unit) 
             .fillMaxWidth()
             .padding(16.dp)
     ) {
+        Text(text = title, color = Color.Black, modifier = Modifier.padding(bottom = 8.dp))
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -60,7 +62,6 @@ fun ExpandableList(stringItems: List<String>, onClick: (input: String) -> Unit) 
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                // and add this function I guess here
                                 selectedItem = item
                                 expanded = false
                                 onClick(item)

@@ -1,5 +1,6 @@
 package com.example.notes.view
 
+import AlarmScheduler.scheduleAlarm
 import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -55,9 +56,9 @@ fun AddEditList(navController: NavController, noteId: Int?) {
     val context = LocalContext.current
     val application = context.applicationContext as Application
     val viewModel: AddEditListVM = viewModel(factory = AddEditListVMFactory(application, noteId))
-    var priorityNames = Priority.entries.map{it.name}
-    var typeNames = Type.entries.map{it.name}
-    var intervalNames = Intervals.entries.map{it.name}
+    val priorityNames = Priority.entries.map{it.name}
+    val typeNames = Type.entries.map{it.name}
+    val intervalNames = Intervals.entries.map{it.name}
     var selInterval: Intervals = Intervals.daily
     var intervalsVisibility by rememberSaveable { mutableStateOf(false) }
 
@@ -78,6 +79,10 @@ fun AddEditList(navController: NavController, noteId: Int?) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    if(viewModel.note.value!!.priority == Priority.medium || viewModel.note.value!!.priority == Priority.high){
+                        scheduleAlarm(selInterval.name, context, viewModel.note.value!!.name)
+                    }
+
                     viewModel.saveNote()
                     Toast.makeText(context, "Note Saved", Toast.LENGTH_SHORT).show()
                     navController.popBackStack()
@@ -93,73 +98,93 @@ fun AddEditList(navController: NavController, noteId: Int?) {
         if (viewModel.note.value == null) {
             CircularProgressIndicator(modifier = Modifier.fillMaxSize())
         } else {
-            Column(Modifier.padding(paddingValues).padding(16.dp)) {
-                // Note Name
-                OutlinedTextField(
-                    value = viewModel.note.value?.name!!,
-                    onValueChange = { viewModel.updateNoteName(it) },
-                    label = { Text("Note Name") },
-                    modifier = Modifier.fillMaxWidth()
-                )
+            LazyColumn(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                item {
+                    OutlinedTextField(
+                        value = viewModel.note.value?.name!!,
+                        onValueChange = { viewModel.updateNoteName(it) },
+                        label = { Text("Note Name") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
-                ExpandableList(priorityNames, {selectedPriority -> viewModel.updateNotePriority(selectedPriority)
-                    if (selectedPriority==Priority.low.name)
-                        intervalsVisibility=false
-                    else
-                        intervalsVisibility=true})
+                item {
+                    ExpandableList("Priority", priorityNames) { selectedPriority ->
+                        viewModel.updateNotePriority(selectedPriority)
+                        intervalsVisibility = selectedPriority != Priority.low.name
+                    }
+                }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ExpandableList(typeNames, {selectedName -> viewModel.updateNoteType(selectedName)})
-
-                Spacer(modifier = Modifier.height(16.dp))
-                if (intervalsVisibility)
-                    ExpandableList(intervalNames, {selectedInterval -> selInterval = Intervals.valueOf(selectedInterval)})
-
-                //Spacer(modifier = Modifier.height(16.dp))
-
-                // Subnotes List
-                LazyColumn {
-                    itemsIndexed(viewModel.subnotes.value) { index, subnote ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-                        ) {
-                            Checkbox(
-                                checked = subnote.isCompleted,
-                                onCheckedChange = { viewModel.toggleCompletion(index) }
-                            )
-                            OutlinedTextField(
-                                value = subnote.name,
-                                onValueChange = { newValue ->
-                                    viewModel.updateSubnote(index, newValue)
-                                },
-                                label = { Text("Subnote") },
-                                modifier = Modifier.weight(1f)
-                            )
+                if (intervalsVisibility) {
+                    item {
+                        ExpandableList("Notification interval", intervalNames) { selectedInterval ->
+                            selInterval = Intervals.valueOf(selectedInterval)
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                item {
+                    ExpandableList("Type", typeNames) { selectedName ->
+                        viewModel.updateNoteType(selectedName)
+                    }
 
-                // Add new subnote button
-                OutlinedButton(
-                    onClick = { viewModel.addNewSubnote() },
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                    shape = RoundedCornerShape(12.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add subnote", tint = MaterialTheme.colorScheme.onPrimary)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Add new list element", color = MaterialTheme.colorScheme.onPrimary)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                itemsIndexed(viewModel.subnotes.value) { index, subnote ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    ) {
+                        Checkbox(
+                            checked = subnote.isCompleted,
+                            onCheckedChange = { viewModel.toggleCompletion(index) }
+                        )
+                        OutlinedTextField(
+                            value = subnote.name,
+                            onValueChange = { newValue ->
+                                viewModel.updateSubnote(index, newValue)
+                            },
+                            label = { Text("Subnote") },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    OutlinedButton(
+                        onClick = { viewModel.addNewSubnote() },
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        ),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                        shape = RoundedCornerShape(12.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add subnote",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text("Add new list element", color = MaterialTheme.colorScheme.onPrimary)
+                    }
                 }
             }
+
         }
     }
 }
