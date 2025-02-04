@@ -18,9 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ExpandableList(title: String, stringItems: List<String>, onClick: (input: String) -> Unit) {
+fun ExpandableList(
+    title: String,
+    stringItems: List<String>,
+    selectedItem: String,  // New parameter to reflect the stored value
+    onClick: (input: String) -> Unit
+) {
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var selectedItem by rememberSaveable { mutableStateOf("Select an item") }
+    var currentSelection by rememberSaveable { mutableStateOf(selectedItem) }  // Initialize with provided value
 
     Column(
         modifier = Modifier
@@ -42,7 +47,7 @@ fun ExpandableList(title: String, stringItems: List<String>, onClick: (input: St
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = selectedItem, color = Color.Black)
+                Text(text = currentSelection, color = Color.Black)
                 Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
             }
         }
@@ -62,7 +67,7 @@ fun ExpandableList(title: String, stringItems: List<String>, onClick: (input: St
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                selectedItem = item
+                                currentSelection = item
                                 expanded = false
                                 onClick(item)
                             }

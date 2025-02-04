@@ -75,7 +75,6 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-
                     if(viewModel.note.value!!.priority == Priority.medium ||viewModel.note.value!!.priority== Priority.high){
                         val id = System.currentTimeMillis().toString()
                         viewModel.note.value!!.notificationid = id
@@ -117,7 +116,11 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
                 }
 
                 item {
-                    ExpandableList("Priority", priorityNames) { selectedPriority ->
+                    ExpandableList(
+                        title = "Priority",
+                        stringItems =  priorityNames,
+                        selectedItem = if (noteId == null) "Select an item" else viewModel.note.value?.priority?.name ?: "Select an item"
+                    ) { selectedPriority ->
                         viewModel.updateNotePriority(selectedPriority)
                         intervalsVisibility = selectedPriority != Priority.low.name
                     }
@@ -125,14 +128,22 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
 
                 if (intervalsVisibility) {
                     item {
-                        ExpandableList("Notification interval", intervalNames) { selectedInterval ->
+                        ExpandableList(
+                            title = "Notification interval",
+                            stringItems = intervalNames,
+                            selectedItem = if (noteId == null) "Select an item" else selInterval.name
+                        ) { selectedInterval ->
                             selInterval = Intervals.valueOf(selectedInterval)
                         }
                     }
                 }
 
                 item {
-                    ExpandableList("Type", typeNames) { selectedName ->
+                    ExpandableList(
+                        title = "Type",
+                        stringItems = typeNames,
+                        selectedItem = if (noteId == null) "Select an item" else viewModel.note.value?.type?.name ?: "Select an item"
+                    ) { selectedName ->
                         viewModel.updateNoteType(selectedName)
                     }
 

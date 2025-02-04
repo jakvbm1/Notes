@@ -122,7 +122,11 @@ fun AddEditList(navController: NavController, noteId: Int?) {
                 }
 
                 item {
-                    ExpandableList("Priority", priorityNames) { selectedPriority ->
+                    ExpandableList(
+                        title = "Priority",
+                        stringItems =  priorityNames,
+                        selectedItem = if (noteId == null) "Select an item" else viewModel.note.value?.priority?.name ?: "Select an item"
+                    ) { selectedPriority ->
                         viewModel.updateNotePriority(selectedPriority)
                         intervalsVisibility = selectedPriority != Priority.low.name
                     }
@@ -130,14 +134,22 @@ fun AddEditList(navController: NavController, noteId: Int?) {
 
                 if (intervalsVisibility) {
                     item {
-                        ExpandableList("Notification interval", intervalNames) { selectedInterval ->
+                        ExpandableList(
+                            title = "Notification interval",
+                            stringItems = intervalNames,
+                            selectedItem = if (noteId == null) "Select an item" else selInterval.name
+                        ) { selectedInterval ->
                             selInterval = Intervals.valueOf(selectedInterval)
                         }
                     }
                 }
 
                 item {
-                    ExpandableList("Type", typeNames) { selectedName ->
+                    ExpandableList(
+                        title = "Type",
+                        stringItems = typeNames,
+                        selectedItem = if (noteId == null) "Select an item" else viewModel.note.value?.type?.name ?: "Select an item"
+                    ) { selectedName ->
                         viewModel.updateNoteType(selectedName)
                     }
 
