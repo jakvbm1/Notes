@@ -12,15 +12,26 @@ import androidx.core.content.ContextCompat
 
 class ReceiveNotif : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-        val alarmId = intent?.getStringExtra("alarmId")?.toLong() ?: return
+        val alarmId = intent?.getStringExtra("alarmId") ?: return
+
+
 
         // Retrieve the interval and name for this specific alarm from SharedPreferences
         val sharedPref = context.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
-        val interval = sharedPref.getString("interval_$alarmId", "daily") ?: "daily"
-        val name = sharedPref.getString("name_$alarmId", "event1") ?: "event1"
-        simpleNotification(context, name, "This is your scheduled notification!")
+        val data = sharedPref.getStringSet(alarmId, setOf())
+        if (data != null) {
+            if (data.size>0){
+                val interval = data.first()
+                val name = data.elementAt(1)
+                simpleNotification(context, name, "This is your scheduled notification!")
+                AlarmScheduler.scheduleAlarm(interval, context, name, alarmId)
+            }
+        }
 
-        AlarmScheduler.scheduleAlarm(interval, context, name)
+
+
+
+
     }
 
 }

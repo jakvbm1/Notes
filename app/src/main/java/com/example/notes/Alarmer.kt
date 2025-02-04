@@ -13,27 +13,27 @@ import androidx.core.content.ContextCompat
 import com.example.notes.R
 import com.example.notes.ReceiveNotif
 import com.example.notes.model.entities.Intervals
+import kotlin.reflect.typeOf
 
 object AlarmScheduler {
 
-    fun scheduleAlarm(interval: String, context: Context, name: String?) {
+    fun scheduleAlarm(interval: String, context: Context, name: String?, AlarmId: String? = null) {
+        var alarmId = AlarmId ?: System.currentTimeMillis()
         val sharedPref = context.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
-        val currentInterval = sharedPref.getString(interval, "Daily")
-        val currentName = sharedPref.getString(name, "event1")
-        val alarmId = System.currentTimeMillis()
-        
+        val data = setOf(interval, name)
 
-        if (interval != currentInterval || name != currentName) {
-            // Only update SharedPreferences if the values have changed
-            with(sharedPref.edit()) {
-                putString("interval_$alarmId", interval) // Save interval with unique key
-                putString("name_$alarmId", name) // Save name with unique key
-                apply()
+        val alarm_ids = sharedPref.all.keys
+
+            if (!alarm_ids.contains(alarmId)){
+                with(sharedPref.edit()) {
+                    putStringSet("$alarmId", data)
+                    apply()
+
             }
         }
+
+
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) {

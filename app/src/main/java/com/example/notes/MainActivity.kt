@@ -1,5 +1,6 @@
 package com.example.notes
 
+import AlarmScheduler
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.AlertDialog
@@ -68,39 +69,29 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initializeApp() {
-
-
-
-            val used_ids: MutableList<String> = mutableListOf()
-            val sharedPref = this.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
+        val sharedPref = this.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
         val all_prefs = sharedPref.all
-        editor.clear()
-        editor.apply()
-//            for ((key, value) in all_prefs) {
-//               println("Key: $key, Value: $value")
-//                val str_key = key ?: ""
-//                if (str_key.startsWith("interval_")){
-//                    var id = str_key.split(("_"))[1]
-//                    if (!used_ids.contains(id)){
-//                        val nameKey = "name_$id"
-//                        val interKey = "interval_$id"
-//                        val name = sharedPref.getString(nameKey, null)
-//                        AlarmScheduler.scheduleAlarm(interKey, this,nameKey )
-//                        used_ids.add(id)
-//                    }
-//
-//                }
-//
-//        }
+//        editor.clear()
+//        editor.apply()
+            for ((key, value) in all_prefs) {
+                println(value.toString())
+                if (value is Set<*>){
+                    if (value !=null){
+                        val alarmID = key
+                        val interval = value.first().toString()
+                        val name = value.elementAt(1).toString()
+                        AlarmScheduler.scheduleAlarm(interval, this, name,key)
+                        Thread.sleep(2000)
+                    }
+                }
+
+                }
 
         }
 
+        }
 
-
-
-
-}
 
 
 
