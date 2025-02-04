@@ -19,6 +19,11 @@ enum class Priority
     low, medium, high
 }
 
+enum class Intervals
+{
+    sixhours, twelvehours, daily, twodays, weekly, seconds
+}
+
 class Converters
 {
     @TypeConverter

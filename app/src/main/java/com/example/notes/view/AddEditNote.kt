@@ -1,6 +1,9 @@
 package com.example.notes.view
 
+import AlarmScheduler.scheduleAlarm
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
@@ -28,11 +31,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.notes.model.entities.Intervals
 import com.example.notes.model.entities.Priority
 import com.example.notes.model.entities.Type
 import com.example.notes.view.components.ExpandableList
 import com.example.notes.viewmodel.AddEditNoteVM
 import com.example.notes.viewmodel.AddEditNoteVMFactory
+import java.io.Console
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,6 +47,11 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
     val viewModel: AddEditNoteVM = viewModel(factory = AddEditNoteVMFactory(application, noteId))
     var priorityNames = Priority.entries.map{it.name}
     var typeNames = Type.entries.map{it.name}
+    var intervalNames = Intervals.entries.map{it.name}
+    var selInterval: Intervals = Intervals.daily
+    var intervalsVisibility = false
+
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -59,6 +69,12 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+
+                    if(viewModel.note.value!!.priority == Priority.medium ||viewModel.note.value!!.priority== Priority.high){
+                        scheduleAlarm(selInterval.name, context, viewModel.note.value!!.name)
+
+                    }
+
                     viewModel.saveNote()
                     Toast.makeText(context, "Note Saved", Toast.LENGTH_SHORT).show()
                     navController.popBackStack()
@@ -87,11 +103,20 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                ExpandableList(priorityNames, {selectedPriority -> viewModel.updateNotePriority(selectedPriority)})
+                ExpandableList(priorityNames, {
+                    selectedPriority -> viewModel.updateNotePriority(selectedPriority)
+                    if (selectedPriority==Priority.low.name)
+                        intervalsVisibility=false
+                    else
+                        intervalsVisibility=true
+
+                })
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 ExpandableList(typeNames, {selectedName -> viewModel.updateNoteType(selectedName)})
+
+
 
                 // Single Note Content
                 OutlinedTextField(
@@ -101,6 +126,10 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
                     modifier = Modifier.fillMaxWidth(),
                     maxLines = 5
                 )
+                Spacer(modifier = Modifier.height(16.dp))
+                if (intervalsVisibility)
+                    ExpandableList(intervalNames, {selectedInterval -> selInterval = Intervals.valueOf(selectedInterval)})
+
             }
         }
     }

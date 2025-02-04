@@ -12,10 +12,11 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.example.notes.R
 import com.example.notes.ReceiveNotif
+import com.example.notes.model.entities.Intervals
 
 object AlarmScheduler {
 
-    fun scheduleAlarm(interval: String, context: Context, name: String) {
+    fun scheduleAlarm(interval: String, context: Context, name: String?) {
         val sharedPref = context.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
         val currentInterval = sharedPref.getString("interval", "Daily")
         val currentName = sharedPref.getString("name", "event1")
@@ -52,12 +53,12 @@ object AlarmScheduler {
         )
 
         val repeatTime = when (interval) {
-            "6Hours" -> 6 * 60 * 60 * 1000L
-            "12Hours" -> 12 * 60 * 60 * 1000L
-            "Daily" -> 24 * 60 * 60 * 1000L
-            "2Daily" -> 2 * 24 * 60 * 60 * 1000L
-            "Weekly" -> 7 * 24 * 60 * 60 * 1000L
-            "minutes" -> 15  * 1000L
+            "sixhours" -> 6 * 60 * 60 * 1000L
+            "twelvehours" -> 12 * 60 * 60 * 1000L
+            "daily" -> 24 * 60 * 60 * 1000L
+            "twodays" -> 2 * 24 * 60 * 60 * 1000L
+            "weekly" -> 7 * 24 * 60 * 60 * 1000L
+            "seconds" -> 15  * 1000L
             else -> 24 * 60 * 60 * 1000L
         }
 
