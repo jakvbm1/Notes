@@ -18,9 +18,10 @@ object AlarmScheduler {
 
     fun scheduleAlarm(interval: String, context: Context, name: String?) {
         val sharedPref = context.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
-        val currentInterval = sharedPref.getString("interval", "Daily")
-        val currentName = sharedPref.getString("name", "event1")
+        val currentInterval = sharedPref.getString(interval, "Daily")
+        val currentName = sharedPref.getString(name, "event1")
         val alarmId = System.currentTimeMillis()
+        
 
         if (interval != currentInterval || name != currentName) {
             // Only update SharedPreferences if the values have changed

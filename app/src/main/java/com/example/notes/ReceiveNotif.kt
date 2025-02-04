@@ -16,7 +16,7 @@ class ReceiveNotif : BroadcastReceiver() {
 
         // Retrieve the interval and name for this specific alarm from SharedPreferences
         val sharedPref = context.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
-        val interval = sharedPref.getString("interval_$alarmId", "Daily") ?: "Daily"
+        val interval = sharedPref.getString("interval_$alarmId", "daily") ?: "daily"
         val name = sharedPref.getString("name_$alarmId", "event1") ?: "event1"
         simpleNotification(context, name, "This is your scheduled notification!")
 
