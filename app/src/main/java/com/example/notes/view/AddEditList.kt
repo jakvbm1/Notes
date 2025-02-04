@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.notes.model.entities.Intervals
 import com.example.notes.model.entities.Priority
 import com.example.notes.model.entities.Type
 import com.example.notes.view.components.ExpandableList
@@ -52,6 +53,9 @@ fun AddEditList(navController: NavController, noteId: Int?) {
     val viewModel: AddEditListVM = viewModel(factory = AddEditListVMFactory(application, noteId))
     var priorityNames = Priority.entries.map{it.name}
     var typeNames = Type.entries.map{it.name}
+    var intervalNames = Intervals.entries.map{it.name}
+    var selInterval: Intervals = Intervals.daily
+    var intervalsVisibility = false
 
     Scaffold(
         topBar = {
@@ -96,11 +100,19 @@ fun AddEditList(navController: NavController, noteId: Int?) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                ExpandableList(priorityNames, {selectedPriority -> viewModel.updateNotePriority(selectedPriority)})
+                ExpandableList(priorityNames, {selectedPriority -> viewModel.updateNotePriority(selectedPriority)
+                    if (selectedPriority==Priority.low.name)
+                        intervalsVisibility=false
+                    else
+                        intervalsVisibility=true})
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 ExpandableList(typeNames, {selectedName -> viewModel.updateNoteType(selectedName)})
+
+                Spacer(modifier = Modifier.height(16.dp))
+                if (intervalsVisibility)
+                    ExpandableList(intervalNames, {selectedInterval -> selInterval = Intervals.valueOf(selectedInterval)})
 
                 //Spacer(modifier = Modifier.height(16.dp))
 
