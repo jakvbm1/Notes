@@ -116,7 +116,7 @@ fun ExpandableButtons(navController: NavController) {
         Column(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(bottom = 40.dp, end = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp, end = 16.dp)
         ) {
             AnimatedVisibility(visible = isExpanded) {
                 Column(horizontalAlignment = Alignment.End) {
