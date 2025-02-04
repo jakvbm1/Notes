@@ -69,8 +69,8 @@ class MainActivity : ComponentActivity() {
         val sharedPref = this.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
         val all_prefs = sharedPref.all
-//        editor.clear()
-//        editor.apply()
+        editor.clear()
+        editor.apply()
             for ((key, value) in all_prefs) {
                 println(value.toString())
                 if (value is Set<*>){

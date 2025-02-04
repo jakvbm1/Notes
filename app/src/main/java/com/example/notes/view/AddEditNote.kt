@@ -75,7 +75,9 @@ fun AddEditNote(navController: NavController, noteId: Int?) {
                 onClick = {
 
                     if(viewModel.note.value!!.priority == Priority.medium ||viewModel.note.value!!.priority== Priority.high){
-                        scheduleAlarm(selInterval.name, context, viewModel.note.value!!.name)
+                        val id = System.currentTimeMillis().toString()
+                        viewModel.note.value!!.notificationid = id
+                        scheduleAlarm(selInterval.name, context, viewModel.note.value!!.name, id)
 
                     }
 

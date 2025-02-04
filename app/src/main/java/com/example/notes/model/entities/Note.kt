@@ -60,7 +60,8 @@ data class Note(
     @ColumnInfo(name = "type") var type:Type,
     @ColumnInfo(name = "priority") var priority: Priority,
     @ColumnInfo(name="has_subnotes")  var hasSubnotes: Boolean,
-    @ColumnInfo(name = "description") var description: String?
+    @ColumnInfo(name = "description") var description: String?,
+    @ColumnInfo(name= "notificationid") var notificationid:String?
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
@@ -69,6 +70,7 @@ data class Note(
         Type.valueOf(parcel.readString() ?: ""),
         Priority.valueOf(parcel.readString() ?: ""),
         parcel.readByte() != 0.toByte(),
+        parcel.readString(),
         parcel.readString()
     ) {
     }

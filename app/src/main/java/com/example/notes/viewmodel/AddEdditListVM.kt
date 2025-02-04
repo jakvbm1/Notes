@@ -51,7 +51,7 @@ class AddEditListVM(application: Application, private val noteID: Int?) : Androi
                     subnotes.value = fetchedSubnotes ?: emptyList()
                 }
             } else {
-                note.value = Note(0, "", System.currentTimeMillis(), Type.work, Priority.low, true, "")
+                note.value = Note(0, "", System.currentTimeMillis(), Type.work, Priority.low, true, "", "")
                 subnotes.value = listOf(Subnote(0, 0, "", false))
             }
         }

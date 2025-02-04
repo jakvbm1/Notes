@@ -8,11 +8,10 @@ import com.example.notes.viewmodel.ReceiveNotif
 
 object AlarmScheduler {
 
-    fun scheduleAlarm(interval: String, context: Context, name: String?, AlarmId: String? = null) {
-        var alarmId = AlarmId ?: System.currentTimeMillis()
+    fun scheduleAlarm(interval: String, context: Context, name: String?, AlarmId: String? = null, deleting:Boolean = false) {
+        var alarmId = AlarmId ?: System.currentTimeMillis().toString()
         val sharedPref = context.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
         val data = setOf(interval, name)
-
         val alarm_ids = sharedPref.all.keys
 
             if (!alarm_ids.contains(alarmId)){

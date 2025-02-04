@@ -9,7 +9,7 @@ import com.example.notes.model.daos.SubnoteDao
 import com.example.notes.model.entities.Note
 import com.example.notes.model.entities.Subnote
 
-@Database(entities = [Note::class, Subnote::class], version = 1, exportSchema = false)
+@Database(entities = [Note::class, Subnote::class], version = 2, exportSchema = false)
 abstract class AppDatabase: RoomDatabase()
 {
     abstract fun noteDao(): NoteDao
@@ -29,4 +29,5 @@ abstract class AppDatabase: RoomDatabase()
             }
         }
     }
+    
 }

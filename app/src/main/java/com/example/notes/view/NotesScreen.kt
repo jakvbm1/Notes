@@ -1,6 +1,7 @@
 package com.example.notes.view
 
 import android.app.Application
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -77,6 +78,8 @@ fun NotesScreen(navController: NavController, ) {
         }
 
     ) { paddingValues ->
+        val context = LocalContext.current
+
         LazyColumn(
             contentPadding = paddingValues,
             modifier = Modifier.fillMaxSize()
@@ -86,7 +89,22 @@ fun NotesScreen(navController: NavController, ) {
                     note = note,
                     onClick = { if (note.hasSubnotes) { navController.navigate("add_edit_list/${note.id}") }
                         else { navController.navigate("add_edit_note/${note.id}") } },
-                    onDeleteClick = { viewModel.removeNote(note) }
+                    onDeleteClick = { viewModel.removeNote(note)
+                    if (note.notificationid!=null){
+
+
+                        if (note.notificationid!=null){
+
+
+                            val sharedPref = context.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
+                            val alarm_ids = sharedPref.all.keys
+                            if (alarm_ids.contains(note.notificationid)){
+                                with(sharedPref.edit()) {
+                                    remove(note.notificationid) // Remove the specific alarm entry
+                                    apply()
+                            }}}
+                    }
+                    }
                 )
             }
         }
