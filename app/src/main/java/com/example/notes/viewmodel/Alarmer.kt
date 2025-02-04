@@ -1,19 +1,10 @@
-import android.Manifest
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
-import com.example.notes.R
-import com.example.notes.ReceiveNotif
-import com.example.notes.model.entities.Intervals
-import kotlin.reflect.typeOf
+import com.example.notes.viewmodel.ReceiveNotif
 
 object AlarmScheduler {
 

@@ -24,16 +24,13 @@ import com.example.notes.view.AddEditList
 import com.example.notes.view.AddEditNote
 import com.example.notes.view.NotesScreen
 import com.example.notes.view.Settings
+import kotlinx.coroutines.delay
 import java.util.Date
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initializeApp()
-
-
-
-
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -68,7 +65,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun initializeApp() {
+    private  fun initializeApp() {
         val sharedPref = this.getSharedPreferences("AlarmPrefs", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
         val all_prefs = sharedPref.all
@@ -82,7 +79,7 @@ class MainActivity : ComponentActivity() {
                         val interval = value.first().toString()
                         val name = value.elementAt(1).toString()
                         AlarmScheduler.scheduleAlarm(interval, this, name,key)
-                        Thread.sleep(2000)
+                        Thread.sleep(2000L)
                     }
                 }
 

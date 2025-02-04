@@ -1,4 +1,4 @@
-package com.example.notes
+package com.example.notes.viewmodel
 
 import android.Manifest
 import android.content.Context
@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.example.notes.R
 
 fun simpleNotification(context: Context, title:String, Text:String) {
 

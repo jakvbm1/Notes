@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Notes"
 
         tools:targetApi="31">
-        <receiver android:name=".ReceiveNotif"
+        <receiver android:name=".viewmodel.ReceiveNotif"
             android:enabled = "true"/>
         <activity
             android:name=".MainActivity"
