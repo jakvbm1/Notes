@@ -112,7 +112,8 @@ val note = Note(
     type = Type.work,
     priority = Priority.low,
     hasSubnotes = false,
-    description = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+    description = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+    notificationid = ""
 )
 
 val formatter = SimpleDateFormat("yyyy-MM-dd") //for making long into a date

@@ -45,7 +45,7 @@ class AddEditNoteVM(application: Application, private val noteID: Int?) : Androi
                 note.value = fetchedNote
             } else {
                 // Create a new empty note
-                note.value = Note(0, "", System.currentTimeMillis(), Type.work, Priority.low, false, "")
+                note.value = Note(0, "", System.currentTimeMillis(), Type.work, Priority.low, false, "", "")
             }
         }
     }
